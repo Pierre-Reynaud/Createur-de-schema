@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <title>Document</title>
+</head>
+<body>
+    <div class="col-md-9" style="padding-left: 0 !important;">
+        <!-- Image de la map -->
+        <img id="mapped-img" class="mx-auto d-block" src="" alt="Imager à mapper" usemap="#imgmap">
+        <svg id="svg-points-movable" style="position: absolute; margin-top: 20px; left: 400px; margin-left: 10%; top: 0; left: 0;">
+            
+        </svg>
+        <map id="map-img" name="imgmap">
+        </map>
+    </div>
+    <div class="col-md-3" style="margin-left: 0 !important;">
+        <div style="margin-bottom: 20px;" class="row">
+            <div class="row">
+                <!-- Boutons parcourir image -->
+                <label for="cheminimage">Choisissez une image :</label>
+                <input type="file" id="cheminimage" name="cheminimage" accept="image/png, image/jpeg" onchange="handleChoiceImage()"><br>
+
+                <!-- Nom de la map -->
+                <label for="namemap">Nom de la map</label>
+                <input type="text" id="namemap" name="namemap"><br>
+
+                <!-- Liste des area objet-->
+                <strong>Objet area : </strong><br>
+                <select id="liste-area-objet" name="list-area-objet" size="10" class="col-md-6" onclick="handleFocusArea()">
+                    
+                </select>
+                <button id="btn-del-area" onClick="handleBtnDelObjArea()" class="btn btn-danger" style="margin-left: 20px;">Supprimer l'area</button>
+                <button id="btn-edit-area" onClick="handleBtnEditObjArea()" class="btn btn-info" style="margin-left: 20px; margin-top: 10px;">Modifier l'area</button>
+                <button id="btn-dup-area" onClick="handleBtnDuplicateObjArea()" class="btn btn-info" style="margin-left: 20px; margin-top: 10px;">Dupluiquer l'area</button>
+            </div>
+            <div class="row">
+                <!--<button id="btn-edit-area" onClick="" class="btn btn-primary" style="margin-left: 20px; margin-top: 10px;">Sauvegarder la map</button>-->
+                <button id="btn-show-code-map" onClick="" class="btn btn-primary" style="margin-left: 20px; margin-top: 10px;"><i class="glyphicon glyphicon-download-alt"></i> Télécharger</button>
+            </div>
+        </div>
+        
+
+        <div id="setting-form" class="row">
+            Area objet : <br>
+            <!-- Id de l'aire -->
+            <label for="idaire">Nom de l'aire</label>
+            <input type="text" id="idaire" name="idaire"><br>
+
+            <!-- Action -->
+            <label for="action">Action (URL)</label>
+            <input type="text" id="action" name="action"><br>
+
+            <!-- Type d'aire -->
+            <label for="areatype">Type d'aire</label>
+            <select id="areatype" name="areatype">
+                <option value="" selected disabled hidden>Choisissez</option>
+                <option value="rect">Rectangle</option>
+                <option value="poly">Polygone</option>
+                <option value="circle">Cercle</option>
+            </select><br>
+
+            Dessin manuel
+            <input id="checkbox-dessin-manuel" type="checkbox" data-toggle="toggle" onclick="handleManualDrawing(0)">
+
+            <!-- Flêche de positionnement -->
+            <div id="div-directional-arrow" class="row">
+                Déplacer la forme :<br>
+                <div class="row" style="margin-left: 0 !important;">
+                    <button id="btn-up" class="col-md-2 col-md-offset-2" onClick="handleUpForm()"><span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span></button>
+                </div>
+                <div class="row" style="margin-left: 0 !important;">
+                    <button id="btn-left" class="col-md-2" onClick="handleLeftForm()"><span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></button>
+                    <button id="btn-right" class="col-md-2 col-md-offset-2" onClick="handleRightForm()"><span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></button>
+                </div>
+                <div class="row" style="margin-left: 0 !important;">
+                    <button id="btn-down" class="col-md-2 col-md-offset-2" onClick="handleDownForm()"><span class="glyphicon glyphicon-arrow-down" aria-hidden="true"></button>
+                </div>
+            </div>
+
+            <div id="div-point" style="overflow:scroll; max-height: 200px;">
+
+            </div>
+            
+
+            <!-- Boutons -->
+            <button id="btn-creat" onClick="handleCreateArea()" class="btn btn-success">Créer l'objet area</button>
+        </div>
+        <!--
+        <div class="row" style="margin-left: 0 !important; padding-top: 50px;">
+            <strong>Mes map : </strong><br> 
+            <select id="liste-map-exsiste" name="list-map" size="10" class="col-md-6">
+                
+            </select>
+            <button id="btn-select-map" onClick="" class="btn btn-primary" style="margin-left: 20px;">Ouvrir</button>
+        </div>-->
+    </div>
+    <div id="modal-map" class="modal-map-html" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="close">&times;</span>
+                <h2>Code de la map</h2>
+            </div>
+            <div class="modal-body">
+                <p id="p-code-map"></p>
+            </div>
+            <div class="modal-footer">
+                <button id="btn-copy-code" type="submit" disabled="disabled" class="btn btn-default btn-default pull-left" data-dismiss="modal"><span class="glyphicon glyphicon-copy"></span> Copier</button>
+            </div>
+        </div>
+    </div>
+</body>
+<script type="text/javascript" src="test.js"></script>
+</html>
